@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pferdefutter-Rechner</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #fdf6ed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff7f0;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 360px;
+    }
+    h1 {
+      background: #e07a3f;
+      color: white;
+      margin: -25px -25px 20px -25px;
+      padding: 15px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .box {
+      background: #f7f1e3;
+      border-radius: 10px;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    input, select {
+      margin-top: 6px;
+      font-size: 18px;
+      text-align: center;
+      padding: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 90%;
+    }
+    .title-row {
+      background: #e76f51;
+      color: white;
+      padding: 8px;
+      border-radius: 10px 10px 0 0;
+      font-weight: bold;
+    }
+    .result {
+      font-size: 24px;
+      font-weight: bold;
+      color: #264653;
+    }
+    .result-icon {
+      font-size: 24px;
+      color: #2a9d8f;
+    }
+    .code {
+      margin-top: 20px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #555;
+      text-align: left;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pferdefutter-Rechner</h1>
+    <div class="grid">
+      <div class="box">
+        Gewicht (kg)<br />
+        <input type="number" id="gewicht" value="600" />
+      </div>
+      <div class="box">
+        Arbeitslevel<br />
+        <select id="arbeitslevel">
+          <option value="leicht">leicht</option>
+          <option value="mittel" selected>mittel</option>
+          <option value="schwer">schwer</option>
+        </select>
+      </div>
+      <div class="box title-row">Bedarf</div>
+      <div class="box title-row">Raufutter (kg)</div>
+      <div class="box">Erhaltungsbedarf</div>
+      <div class="box result"><span class="result-icon">✅</span> <span id="ergebnis">12 kg</span></div>
+    </div>
+    <div class="code">
+      =WENNFEHLER(WENN(B2="leicht",A2/100*1.5,WENN(B2="mittel",A2/100*2,WENN(B2="schwer",A2/100*3,"Ungültiger Arbeitslevel"))),"Bitte Eingabe prüfen")
+    </div>
+  </div>
+
+  <script>
+    const gewichtInput = document.getElementById("gewicht");
+    const arbeitslevelInput = document.getElementById("arbeitslevel");
+    const ergebnisOutput = document.getElementById("ergebnis");
+
+    function berechne() {
+      const gewicht = parseFloat(gewichtInput.value);
+      const level = arbeitslevelInput.value;
+      let faktor = level === "leicht" ? 1.5 : level === "mittel" ? 2 : level === "schwer" ? 3 : 0;
+
+      if (!isNaN(gewicht) && faktor > 0) {
+        const result = (gewicht / 100 * faktor).toFixed(1);
+        ergebnisOutput.textContent = result + " kg";
+      } else {
+        ergebnisOutput.textContent = "Fehler";
+      }
+    }
+
+    gewichtInput.addEventListener("input", berechne);
+    arbeitslevelInput.addEventListener("change", berechne);
+    berechne();
+  </script>
+</body>
+</html>
